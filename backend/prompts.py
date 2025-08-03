@@ -33,9 +33,9 @@ def get_suggested_questions() -> list:
     """Get a list of suggested questions users can ask."""
     return [
         "What is Pauls current role?",
-        "What are Pauls main technical skills?",
+        "What are Pauls main technical skills?", 
         "Can you tell me about Pauls education?",
         "What projects has Paul worked on?",
         "What is Pauls professional experience?",
-        "What certifications does Paul have?"
+        "Who are Pauls professional references?"
     ]

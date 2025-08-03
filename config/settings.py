@@ -29,12 +29,24 @@ MAX_REQUESTS_PER_HOUR = 50
 MAX_TOKENS_PER_DAY = 10000
 
 def load_cv_data() -> str:
-    """Load CV data from Streamlit secrets or file fallback."""
+    """Load CV data and references from Streamlit secrets or file fallback."""
+    cv_content = ""
+    references_content = ""
+    
     try:
         import streamlit as st
         # Try to load from Streamlit secrets first (for production)
-        if hasattr(st, 'secrets') and 'CV_DATA' in st.secrets:
-            return st.secrets['CV_DATA']
+        if hasattr(st, 'secrets'):
+            if 'CV_DATA' in st.secrets:
+                cv_content = st.secrets['CV_DATA']
+            if 'REFERENCES' in st.secrets:
+                references_content = st.secrets['REFERENCES']
+            
+            if cv_content:
+                # Combine CV data with references if both exist
+                if references_content:
+                    return f"{cv_content}\n\n## References\n\n{references_content}"
+                return cv_content
     except Exception:
         pass
     
@@ -43,9 +55,9 @@ def load_cv_data() -> str:
         with open(CV_DATA_FILE, 'r', encoding='utf-8') as f:
             content = f.read()
             if "placeholder" in content.lower() or "demo content" in content.lower():
-                return "CV data not configured. Please add CV_DATA to Streamlit secrets."
+                return "CV data not configured. Please add CV_DATA and optionally REFERENCES to Streamlit secrets."
             return content
     except FileNotFoundError:
-        return "CV data not found. Please add CV_DATA to Streamlit secrets or data/cv_data.txt file."
+        return "CV data not found. Please add CV_DATA and optionally REFERENCES to Streamlit secrets or data/cv_data.txt file."
     except Exception as e:
         return f"Error loading CV data: {str(e)}"
