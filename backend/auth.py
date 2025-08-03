@@ -1,16 +1,35 @@
 import os
 import hashlib
 import time
+import bcrypt
+import streamlit as st
 from typing import Optional
 
 class AuthManager:
     def __init__(self):
-        self.access_password = os.getenv("ACCESS_PASSWORD", "default_password")
         self.session_timeout = 3600  # 1 hour in seconds
         
     def verify_password(self, password: str) -> bool:
-        """Verify if the provided password matches the access password."""
-        return password == self.access_password
+        """Verify if the provided password matches the stored hash."""
+        try:
+            # Try to get password hash from Streamlit secrets first
+            if hasattr(st, 'secrets') and 'PASSWORD_HASH' in st.secrets:
+                stored_hash = st.secrets['PASSWORD_HASH'].encode('utf-8')
+                return bcrypt.checkpw(password.encode('utf-8'), stored_hash)
+        except Exception as e:
+            print(f"Error checking password: {e}")
+        
+        # Fallback to environment variable (for local dev)
+        stored_hash = os.getenv("PASSWORD_HASH", "")
+        if stored_hash:
+            try:
+                return bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8'))
+            except Exception:
+                pass
+                
+        # Final fallback - plain text comparison (insecure)
+        access_password = os.getenv("ACCESS_PASSWORD", "default_password")
+        return password == access_password
     
     def generate_session_token(self, password: str) -> Optional[str]:
         """Generate a session token after successful password verification."""
