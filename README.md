@@ -2,6 +2,107 @@
 
 *Lebenslauf Wissensassistent* - A secure, password-protected chatbot that answers questions about your CV/professional background using Anthropic's Claude API.
 
+## Architecture
+
+```mermaid
+graph TB
+    subgraph "GitHub Repository"
+        A[Source Code] --> B[Auto Deploy Trigger]
+    end
+    
+    subgraph "Streamlit Cloud"
+        B --> C[Build & Deploy]
+        C --> D[Web Application]
+        
+        subgraph "Authentication Layer"
+            E[Password Input] --> F[bcrypt Verification]
+            F --> G[Session Management]
+        end
+        
+        subgraph "Application Core"
+            H[app.py<br/>Main Interface] --> I[Login Screen]
+            H --> J[Chat Interface]
+            
+            subgraph "Backend Services"
+                K[auth.py<br/>Authentication]
+                L[chatbot.py<br/>AI Integration]
+                M[prompts.py<br/>Messages & Questions]
+            end
+            
+            subgraph "Configuration"
+                N[settings.py<br/>App Config & Data Loading]
+            end
+        end
+        
+        subgraph "Secure Storage"
+            O[Streamlit Secrets]
+            P[CV_DATA]
+            Q[REFERENCES]
+            R[PASSWORD_HASH]
+            S[ANTHROPIC_API_KEY]
+        end
+    end
+    
+    subgraph "External Services"
+        T[Anthropic Claude API<br/>claude-3-5-sonnet]
+    end
+    
+    subgraph "User Experience"
+        U[User] --> V[Browser]
+        V --> D
+    end
+    
+    %% Data Flow
+    U --> E
+    E --> F
+    F --> G
+    G --> J
+    J --> L
+    L --> T
+    T --> L
+    L --> J
+    J --> V
+    
+    %% Configuration Flow
+    N --> P
+    N --> Q
+    P --> L
+    Q --> L
+    
+    %% Authentication Flow
+    K --> R
+    K --> G
+    
+    %% AI Integration
+    L --> S
+    S --> T
+    
+    %% Styling
+    classDef github fill:#f9f9f9,stroke:#333,stroke-width:2px
+    classDef streamlit fill:#ff4b4b,stroke:#333,stroke-width:2px,color:#fff
+    classDef auth fill:#fbbf24,stroke:#333,stroke-width:2px
+    classDef backend fill:#3b82f6,stroke:#333,stroke-width:2px,color:#fff
+    classDef secrets fill:#10b981,stroke:#333,stroke-width:2px,color:#fff
+    classDef external fill:#8b5cf6,stroke:#333,stroke-width:2px,color:#fff
+    classDef user fill:#06b6d4,stroke:#333,stroke-width:2px,color:#fff
+    
+    class A,B github
+    class C,D,H,I,J streamlit
+    class E,F,G,K auth
+    class L,M,N backend
+    class O,P,Q,R,S secrets
+    class T external
+    class U,V user
+```
+
+### Key Components
+
+1. **GitHub Integration**: Automatic deployment from repository updates
+2. **Authentication System**: Secure bcrypt password hashing with session management
+3. **AI Integration**: Claude 3.5 Sonnet for intelligent CV-based conversations
+4. **Privacy-First Design**: Sensitive data stored in Streamlit secrets (never in code)
+5. **Modern UI**: Clean, professional interface with responsive design
+
 ## Features
 
 - 🔒 **Secure Access**: Password-protected via URL parameter or login form
