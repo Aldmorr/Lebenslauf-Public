@@ -500,7 +500,17 @@ def check_session_validity():
 
 def display_chat_interface():
     """Display the main chat interface."""
-    st.markdown(f"# {APP_ICON} {APP_TITLE}")
+    # Header with back button
+    col1, col2 = st.columns([1, 6])
+    with col1:
+        if st.button("← Back to Login", key="back_to_login"):
+            st.session_state.authenticated = False
+            st.session_state.session_token = None
+            st.session_state.messages = []
+            st.session_state.session_start_time = None
+            st.rerun()
+    with col2:
+        st.markdown(f"# {APP_ICON} {APP_TITLE}")
     
     # Session info in sidebar
     with st.sidebar:
@@ -537,6 +547,15 @@ def display_chat_interface():
                 st.session_state.messages.append({"role": "user", "content": question})
                 handle_user_message(question)
                 st.rerun()
+        
+        # Add disclaimer
+        st.markdown("""
+        <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2563eb; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #6b7280; font-size: 14px;">
+                This chatbot can answer questions based on my CV and references. It does its best to be helpful, but it might occasionally make mistakes or provide incomplete information. Please double-check anything important.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Display chat messages
     for message in st.session_state.messages:
