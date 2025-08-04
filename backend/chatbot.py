@@ -7,7 +7,7 @@ class CVChatbot:
     def __init__(self, cv_data: str):
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.cv_data = cv_data
-        self.model = "claude-3-haiku-20240307"  # Most cost-effective model
+        self.model = "claude-3-5-sonnet-20241022"  # Better quality responses
         self.max_tokens = 1000
         self.system_prompt = get_system_prompt(cv_data)
         
@@ -71,16 +71,16 @@ class CVChatbot:
     
     def get_conversation_cost(self, total_tokens: int) -> float:
         """
-        Calculate approximate cost based on Claude Haiku pricing.
-        Input: $0.25 per 1M tokens
-        Output: $1.25 per 1M tokens
+        Calculate approximate cost based on Claude 3.5 Sonnet pricing.
+        Input: $3 per 1M tokens
+        Output: $15 per 1M tokens
         This is a rough estimate - actual costs may vary.
         """
         # Rough estimate assuming 70% input, 30% output tokens
         input_tokens = int(total_tokens * 0.7)
         output_tokens = int(total_tokens * 0.3)
         
-        input_cost = (input_tokens / 1_000_000) * 0.25
-        output_cost = (output_tokens / 1_000_000) * 1.25
+        input_cost = (input_tokens / 1_000_000) * 3.0
+        output_cost = (output_tokens / 1_000_000) * 15.0
         
         return input_cost + output_cost

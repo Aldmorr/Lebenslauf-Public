@@ -12,7 +12,7 @@ APP_ICON = ""
 SESSION_TIMEOUT = 3600  # 1 hour
 
 # Anthropic API settings
-DEFAULT_MODEL = "claude-3-haiku-20240307"
+DEFAULT_MODEL = "claude-3-5-sonnet-20241022"
 MAX_TOKENS = 1000
 MAX_CONVERSATION_LENGTH = 20  # Maximum number of messages to keep in history
 
