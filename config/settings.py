@@ -7,7 +7,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 CV_DATA_FILE = DATA_DIR / "cv_data.txt"
 
 # Application settings
-APP_TITLE = "Chat with Pauls CV"
+APP_TITLE = "Chat with Pauls CV and references"
 APP_ICON = ""
 SESSION_TIMEOUT = 3600  # 1 hour
 
