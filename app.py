@@ -500,17 +500,8 @@ def check_session_validity():
 
 def display_chat_interface():
     """Display the main chat interface."""
-    # Header with back button
-    col1, col2 = st.columns([1, 6])
-    with col1:
-        if st.button("← Back to Login", key="back_to_login"):
-            st.session_state.authenticated = False
-            st.session_state.session_token = None
-            st.session_state.messages = []
-            st.session_state.session_start_time = None
-            st.rerun()
-    with col2:
-        st.markdown(f"# {APP_ICON} {APP_TITLE}")
+    # Header
+    st.markdown(f"# {APP_ICON} {APP_TITLE}")
     
     # Session info in sidebar
     with st.sidebar:
