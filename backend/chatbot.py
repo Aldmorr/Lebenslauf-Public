@@ -7,7 +7,7 @@ class CVChatbot:
     def __init__(self, cv_data: str):
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.cv_data = cv_data
-        self.model = "claude-3-5-sonnet-20241022"  # Better quality responses
+        self.model = "claude-3-7-sonnet-latest"  # Latest Claude 3.7 Sonnet model
         self.max_tokens = 1000
         self.system_prompt = get_system_prompt(cv_data)
         
